@@ -1,0 +1,40 @@
+﻿<Window x:Class="PasswordsProtector.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PasswordsProtector.ViewModels"
+         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="450" Width="600" Loaded="Window_Loaded">
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding Path=CheckPasswordWhenClosingWindowCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid Background="DarkGray">
+            <StackPanel VerticalAlignment="Center">
+                <TextBox x:Name="passwordCheck"
+                         Text="{Binding Path=CheckPassword}" 
+                         Height="25" Background="Brown" Margin="10"/>
+                <Button  Command="{Binding PasswordValidationCommand, Mode=OneWay}"
+                         Height="25" Content="Вход" Margin="10"/>
+
+                <TextBox x:Name="oldPassword" Text="{Binding Path=OldPassword}" 
+                         Height="25" Background="Brown" Margin="10"/>
+                <TextBox x:Name="setNewPassword" Text="{Binding Path=SetMewPassword}" 
+                         Height="25" Background="Brown" Margin="10"/>
+                <TextBox x:Name="CheckNewPassworSet" Text="{Binding Path=CheckNewPasswordSet}"
+                         Height="25" Background="Brown" Margin="10"/>
+                <Button Height="25"  Content="Сохранить новый пароль" Margin="10" 
+                        Command="{Binding SaveNewPasswordCommand, Mode=OneWay}"/>
+                <Button Content="Выйти" Command="{Binding CloseApplicationCommand, Mode=OneWay}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,47 @@
+﻿<Window x:Class="PasswordsProtector.Views.ContentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PasswordsProtector.ViewModels"
+        mc:Ignorable="d"
+        Title="ContentWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+        <local:ContentWindowViewModel x:Key="myVW"/>
+    </Window.Resources>
+    <StackPanel>
+        <Button Height="30" Command="{Binding AddData, Mode=OneWay, Source={StaticResource myVW}}"/>
+        <StackPanel>
+            <TextBox Text="{Binding Source={StaticResource myVW}, Path=UrlSiteVM}" Background="Gainsboro"/>
+            <TextBox Text="{Binding Source={StaticResource myVW}, Path=LoginVM}"/>
+            <TextBox Text="{Binding Source={StaticResource myVW}, Path=PasswordVM}"/>
+        </StackPanel>
+        <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=EnteredData}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <VirtualizingStackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="URL:"/>
+                                <TextBlock Text="Login:"/>
+                                <TextBlock Text="Password:"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1"
+                                        Margin="10,0,0,0">
+                                <TextBlock Text="{Binding UrlSite}"/>
+                                <TextBlock Text="{Binding Login}"/>
+                                <TextBlock Text="{Binding Password}"/>
+                            </StackPanel>
+                        </Grid>
+                        <Button Height="15" Command="{Binding DeleteData, Source={StaticResource myVW}, Mode=OneWay}" 
+                                CommandParameter="{Binding}"/>
+                    </VirtualizingStackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackPanel>
+</Window>
