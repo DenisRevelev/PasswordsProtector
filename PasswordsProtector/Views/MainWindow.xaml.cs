@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WindowsDesktop;
 
 namespace PasswordsProtector.Views
 {
@@ -24,8 +25,29 @@ namespace PasswordsProtector.Views
     {
         public MainWindow()
         {
-            InitializeComponent();
            
+            InitializeComponent();
+            InitializeComObjects();
+            CreatAndMove();
+        }
+
+        private static async void InitializeComObjects()
+        {
+            try
+            {
+                await VirtualDesktopProvider.Default.Initialize(TaskScheduler.FromCurrentSynchronizationContext());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Failed to initialize.");
+            }
+
+            VirtualDesktop.CurrentChanged += (sender, args) => System.Diagnostics.Debug.WriteLine($"Desktop changed: {args.NewDesktop.Id}");
+        }
+        VirtualDesktop desktop = VirtualDesktop.Create();
+        private void CreatAndMove()
+        {
+            desktop.Switch();
         }
 
         [DllImport("user32.dll")]
