@@ -83,7 +83,7 @@ namespace PasswordsProtector.ViewModels
         public MainWindowViewModel()
         {
             DesktopManager.InitializeComObjects();
-            DesktopManager.CreatNewDesktopAndMove();
+            DesktopManager.SwitchDesktop();
             if (!IsInDesignMode)
             {
                 ViewId = Guid.NewGuid();

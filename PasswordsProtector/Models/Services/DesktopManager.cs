@@ -25,7 +25,7 @@ namespace PasswordsProtector.Models.Services
             VirtualDesktop.CurrentChanged += (sender, args) => System.Diagnostics.Debug.WriteLine($"Desktop changed: {args.NewDesktop.Id}");
         }
 
-        public static void CreatNewDesktopAndMove()
+        public static void SwitchDesktop()
         {
             desktop.Switch();
         }
