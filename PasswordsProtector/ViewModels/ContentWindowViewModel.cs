@@ -48,6 +48,19 @@ namespace PasswordsProtector.ViewModels
                 });
             }
         }
+
+        private RelayCommand _removeDesktopCommand { get; set; }
+
+        public RelayCommand RemoveDesktopCommand
+        {
+            get
+            {
+                return _removeDesktopCommand ?? new RelayCommand(parameter =>
+                {
+                    DesktopManager.RemoveDesktop();
+                });
+            }
+        }
         #endregion
 
         #region CONSTRUCTORS

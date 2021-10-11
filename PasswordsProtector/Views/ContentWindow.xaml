@@ -4,11 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordsProtector.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="ContentWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <Window.Resources>
         <local:ContentWindowViewModel x:Key="myVW"/>
     </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding RemoveDesktopCommand, Mode=OneWay, Source={StaticResource myVW}}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <StackPanel>
         <Button Height="30" Command="{Binding AddData, Mode=OneWay, Source={StaticResource myVW}}"/>
         <StackPanel>

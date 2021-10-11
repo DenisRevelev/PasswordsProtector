@@ -9,8 +9,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
+using WindowsDesktop;
 
 namespace PasswordsProtector.ViewModels
 {
@@ -80,6 +82,8 @@ namespace PasswordsProtector.ViewModels
         #region CONSTRUCTORS
         public MainWindowViewModel()
         {
+            DesktopManager.InitializeComObjects();
+            DesktopManager.CreatNewDesktopAndMove();
             if (!IsInDesignMode)
             {
                 ViewId = Guid.NewGuid();
