@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
 using WindowsDesktop;
 namespace PasswordsProtector.Models.Services
 {
@@ -27,6 +32,7 @@ namespace PasswordsProtector.Models.Services
 
         public static void SwitchDesktop()
         {
+            //VirtualDesktopHelper.MoveToDesktop(GetForegroundWindow(), desktop);
             desktop.Switch();
         }
 
@@ -34,5 +40,8 @@ namespace PasswordsProtector.Models.Services
         {
             desktop.Remove();
         }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
     }
 }

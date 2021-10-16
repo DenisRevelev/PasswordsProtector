@@ -223,6 +223,7 @@ namespace PasswordsProtector.ViewModels
             {
                 Application.Current.Shutdown();
                 CallEncryptMethod();
+                DesktopManager.RemoveDesktop();
             }
             else
             {

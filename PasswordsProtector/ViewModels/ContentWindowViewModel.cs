@@ -18,7 +18,7 @@ namespace PasswordsProtector.ViewModels
         private string _urlSite = "";
         private string _login = "";
         private string _password = "";
-        private const string _fileName = "Keeper-of-Passwords.xml";
+        private const string _fileName = "Microsoft.CodeAnalysis.xml";
         private ObservableCollection<ContentWindowModel> _enteredData = new ObservableCollection<ContentWindowModel>();
         private const string _encryptElement = "ArrayOfContentWindowModel";
         #endregion
@@ -102,7 +102,8 @@ namespace PasswordsProtector.ViewModels
             get => _urlSite;
             set
             {
-                _urlSite = value;
+                _urlSite = CryptographyDataInMemory.EncryptDataInMemory(value);
+                if (value != string.Empty) value = string.Empty;
                 OnPropertyChanged();
             }
         }
@@ -112,7 +113,8 @@ namespace PasswordsProtector.ViewModels
             get => _login;
             set
             {
-                _login = value;
+                _login = CryptographyDataInMemory.EncryptDataInMemory(value);
+                if (value != string.Empty) value = string.Empty;
                 OnPropertyChanged();
             }
         }
@@ -122,7 +124,8 @@ namespace PasswordsProtector.ViewModels
             get => _password;
             set
             {
-                _password = value;
+                _password = CryptographyDataInMemory.EncryptDataInMemory(value);
+                if (value != string.Empty) value = string.Empty;
                 OnPropertyChanged();
             }
         }
@@ -137,7 +140,10 @@ namespace PasswordsProtector.ViewModels
             }
             else
             {
-                EnteredData.Add(new ContentWindowModel { UrlSite = UrlSiteVM, Login = LoginVM, Password = PasswordVM });
+                EnteredData.Add(new ContentWindowModel {
+                    UrlSite = CryptographyDataInMemory.DecryptDataInMemory(UrlSiteVM),
+                    Login = CryptographyDataInMemory.DecryptDataInMemory(LoginVM), 
+                    Password = CryptographyDataInMemory.DecryptDataInMemory(PasswordVM) });
                 SaveEndEcryptFile();
             }
         }
