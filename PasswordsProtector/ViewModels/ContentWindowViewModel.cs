@@ -49,6 +49,10 @@ namespace PasswordsProtector.ViewModels
             }
         }
 
+        /// <summary>
+        /// This command is executed when the application exits.
+        /// Through the closing event.
+        /// </summary>
         private RelayCommand _removeDesktopCommand { get; set; }
 
         public RelayCommand RemoveDesktopCommand
@@ -57,7 +61,7 @@ namespace PasswordsProtector.ViewModels
             {
                 return _removeDesktopCommand ?? new RelayCommand(parameter =>
                 {
-                    DesktopManager.RemoveDesktop();
+                    DesktopManager.RemoveDesktop(); // Removes virtual desktop.
                 });
             }
         }
@@ -132,6 +136,9 @@ namespace PasswordsProtector.ViewModels
         #endregion
 
         #region METHODS
+        /// <summary>
+        /// Adds the entered data to the data collection.
+        /// </summary>
         private void AddEnteredData()
         {
             if (CheckFieldsEmptiness() == true)
@@ -148,12 +155,34 @@ namespace PasswordsProtector.ViewModels
             }
         }
 
+        /// <summary>
+        /// Checks if all fields are filled in.
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckFieldsEmptiness()
+        {
+            var boolCheck = false;
+            if (UrlSiteVM == string.Empty || LoginVM == string.Empty || PasswordVM == string.Empty)
+            {
+                boolCheck = true;
+            }
+            return boolCheck;
+        }
+
+        /// <summary>
+        /// Removes the selected item from the data collection.
+        /// </summary>
+        /// <param name="data"></param>
         private void DeleteSelectedData(ContentWindowModel data)
         {
             EnteredData.Remove(data);
             SaveEndEcryptFile();
         }
 
+        /// <summary>
+        /// Check for xml file with passwords. If it is, then it creates a new, empty file.
+        /// If so, it loads data from it.
+        /// </summary>
         private void CheckFileExists()
         {
             var fileEx = File.Exists(_fileName);
@@ -169,20 +198,14 @@ namespace PasswordsProtector.ViewModels
             }
         }
 
+        /// <summary>
+        /// Saves the data added to the collection to an xml file.
+        /// And then it encrypts the file.
+        /// </summary>
         private void SaveEndEcryptFile()
         {
             SaveData.SaveCollectionData(EnteredData, _fileName);
             CryptographyXml.EcryptXml(_encryptElement, _fileName);
-        }
-
-        private bool CheckFieldsEmptiness()
-        {
-            var boolCheck = false;
-            if (UrlSiteVM == string.Empty || LoginVM == string.Empty || PasswordVM == string.Empty)
-            {
-                boolCheck = true;
-            }
-            return boolCheck;
         }
         #endregion
 

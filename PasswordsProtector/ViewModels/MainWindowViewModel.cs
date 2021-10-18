@@ -153,6 +153,9 @@ namespace PasswordsProtector.ViewModels
             set => _passwordApplication = value;
         }
 
+        /// <summary>
+        /// Gets the same unique identifier as the MainWindow.xaml
+        /// </summary>
         public Guid ViewId
         {
             get => _viewId;
