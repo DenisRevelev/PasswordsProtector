@@ -10,11 +10,6 @@
     <Window.Resources>
         <local:ContentWindowViewModel x:Key="myVW"/>
     </Window.Resources>
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{Binding RemoveDesktopCommand, Mode=OneWay, Source={StaticResource myVW}}"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <StackPanel>
         <Button Height="30" Command="{Binding AddData, Mode=OneWay, Source={StaticResource myVW}}"/>
         <StackPanel>

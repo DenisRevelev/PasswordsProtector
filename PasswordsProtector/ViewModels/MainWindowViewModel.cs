@@ -11,8 +11,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Xml.Linq;
-using WindowsDesktop;
 
 namespace PasswordsProtector.ViewModels
 {
@@ -35,9 +35,9 @@ namespace PasswordsProtector.ViewModels
         {
             get
             {
-                return _savNewePasswordCommand ?? new RelayCommand(parameter =>
+                return _savNewePasswordCommand ?? new RelayCommand(async parameter =>
                 {
-                    SaveNewPassword();
+                   await SaveNewPasswordAsync();
                 });
             }
         }
@@ -47,9 +47,9 @@ namespace PasswordsProtector.ViewModels
         {
             get
             {
-                return _passwordValidationCommand ?? new RelayCommand(parameter =>
+                return _passwordValidationCommand ?? new RelayCommand(async parameter =>
                 {
-                    PasswordValidation();
+                    await PasswordValidationAsync();
                 });
             }
         }
@@ -59,9 +59,9 @@ namespace PasswordsProtector.ViewModels
         {
             get
             {
-                return _checkPasswordWhenClosingWindow ?? new RelayCommand(parameter =>
-                {
-                    CheckPasswordWhenClosingWindow();
+                return _checkPasswordWhenClosingWindow ?? new RelayCommand( async parameter => 
+                { 
+                    await CheckPasswordWhenClosingWindowAsync(); 
                 });
             }
         }
@@ -77,13 +77,12 @@ namespace PasswordsProtector.ViewModels
                 });
             }
         }
+
         #endregion
 
         #region CONSTRUCTORS
         public MainWindowViewModel()
         {
-            DesktopManager.InitializeComObjects();
-            DesktopManager.SwitchDesktop();
             if (!IsInDesignMode)
             {
                 ViewId = Guid.NewGuid();
@@ -161,6 +160,7 @@ namespace PasswordsProtector.ViewModels
             get => _viewId;
             set => _viewId = value;
         }
+
         #endregion
 
         #region METHODS
@@ -204,14 +204,14 @@ namespace PasswordsProtector.ViewModels
         /// Closes the window "MainWindow.xaml" if the password is entered correctly.
         /// At the same time, the application continues to work and open the window "ContentWindow.xaml". 
         /// </summary>
-        private void PasswordValidation()
+        private async Task PasswordValidationAsync()
         {
             var root = GetValueXElement();
             if (CheckPassword != root)
                 CheckPassword = "Неверный пароль";
             else
             {
-                CallEncryptMethod();
+                await Task.Run(() => CallEncryptMethod());
                 App.CloseMainWindow(ViewId);
             }
         }
@@ -219,26 +219,25 @@ namespace PasswordsProtector.ViewModels
         /// <summary>
         /// If the password is not correct and the window "MainWindow.xaml" is closed, then the application terminates.
         /// </summary>
-        private void CheckPasswordWhenClosingWindow()
+        private async Task CheckPasswordWhenClosingWindowAsync()
         {
             var root = GetValueXElement();
             if (CheckPassword == "" || CheckPassword != root)
             {
                 Application.Current.Shutdown();
-                CallEncryptMethod();
-                DesktopManager.RemoveDesktop();
+                await Task.Run(() => CallEncryptMethod());
             }
             else
             {
                 App.ShowContentWindow();
-                CallEncryptMethod();
+                await Task.Run(() => CallEncryptMethod());
             }
         }
 
         /// <summary>
         /// Saves the newly set application password.
         /// </summary>
-        private void SaveNewPassword()
+        private async Task SaveNewPasswordAsync()
         {
             var root = GetValueXElement();
             if (OldPassword != root)
@@ -248,8 +247,8 @@ namespace PasswordsProtector.ViewModels
             else
             {
                 PasswordApplication.Add(new MainWindowModel { Password = SetMewPassword });
-                SaveData.SaveCollectionData(PasswordApplication, _filaName);
-                CallEncryptMethod();
+                await Task.Run(() => SaveData.SaveCollectionData(PasswordApplication, _filaName));
+                await Task.Run(() => CallEncryptMethod());
             }
         }
 

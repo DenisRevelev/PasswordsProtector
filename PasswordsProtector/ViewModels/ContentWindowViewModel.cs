@@ -48,23 +48,6 @@ namespace PasswordsProtector.ViewModels
                 });
             }
         }
-
-        /// <summary>
-        /// This command is executed when the application exits.
-        /// Through the closing event.
-        /// </summary>
-        private RelayCommand _removeDesktopCommand { get; set; }
-
-        public RelayCommand RemoveDesktopCommand
-        {
-            get
-            {
-                return _removeDesktopCommand ?? new RelayCommand(parameter =>
-                {
-                    DesktopManager.RemoveDesktop(); // Removes virtual desktop.
-                });
-            }
-        }
         #endregion
 
         #region CONSTRUCTORS
