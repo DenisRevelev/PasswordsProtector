@@ -7,33 +7,107 @@
          xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="450" Width="600" Loaded="Window_Loaded">
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Title="MainWindow" Height="350" Width="400" Loaded="Window_Loaded">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
+
+    <!-- // The command that works when the window is closed-->
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding Path=CheckPasswordWhenClosingWindowCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
-        <Grid Background="DarkGray">
-            <StackPanel VerticalAlignment="Center">
-                <TextBox x:Name="passwordCheck"
-                         Text="{Binding Path=CheckPassword}" 
-                         Height="25" Background="Brown" Margin="10"/>
-                <Button  Command="{Binding PasswordValidationCommand, Mode=OneWay}"
-                         Height="25" Content="Вход" Margin="10"/>
 
-                <TextBox x:Name="oldPassword" Text="{Binding Path=OldPassword}" 
-                         Height="25" Background="Brown" Margin="10"/>
-                <TextBox x:Name="setNewPassword" Text="{Binding Path=SetMewPassword}" 
-                         Height="25" Background="Brown" Margin="10"/>
-                <TextBox x:Name="CheckNewPassworSet" Text="{Binding Path=CheckNewPasswordSet}"
-                         Height="25" Background="Brown" Margin="10"/>
-                <Button Height="25"  Content="Сохранить новый пароль" Margin="10" 
-                        Command="{Binding SaveNewPasswordCommand, Mode=OneWay}"/>
-                <Button Content="Выйти" Command="{Binding CloseApplicationCommand, Mode=OneWay}"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Panel.ZIndex="1" Orientation="Horizontal" FlowDirection="RightToLeft" >
+            <Button Content="X" Width="20" Command="{Binding CloseApplicationCommand, Mode=OneWay}"/>
+        </StackPanel>
+        <Grid Grid.RowSpan="2" Background="{StaticResource BasicColor}">
+            
+            <StackPanel VerticalAlignment="Center">
+                <!--#region // Triggers for animation UI Elements-->
+                <StackPanel.Triggers>
+                    <EventTrigger RoutedEvent="Button.Click" SourceName="showUIElementForSetNewPassword">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="animatedTranslateTransformSetPassword"
+                                                 Storyboard.TargetProperty="(TranslateTransform.Y)"
+                                                 To="0" Duration="0:0:1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.Click" SourceName="showUIElementForEntrance">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="animatedTranslateTransformSetPassword"
+                                                 Storyboard.TargetProperty="(TranslateTransform.Y)"
+                                                 To="-255" Duration="0:0:1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </StackPanel.Triggers>
+                <!--#endregion-->
+                
+                <Grid>
+                    <StackPanel HorizontalAlignment="Center">
+                        <Label Content="Password Protector"
+                               FontSize="20"/>
+                    </StackPanel>
+                    <!--#region // Password field-->
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBox x:Name="passwordCheck"
+                             Text="{Binding Path=CheckPassword}" 
+                             Height="25" Background="White" Margin="10"/>
+                        <Button  Command="{Binding PasswordValidationCommand, Mode=OneWay}"
+                             Height="25" Content="Вход" Margin="10"/>
+                    </StackPanel>
+                    <!--#endregion-->
+
+                    <!--#region // Password change field-->
+                    <StackPanel VerticalAlignment="Center">
+                        <StackPanel.RenderTransform>
+                            <TranslateTransform x:Name="animatedTranslateTransformSetPassword" X="0" Y="-255"/>
+                        </StackPanel.RenderTransform>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition  Height="22"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Background="{StaticResource AdditionalColor}">
+                                <TextBox x:Name="oldPassword" Text="{Binding Path=OldPassword}" 
+                                         Height="25" Background="White" Margin="10"/>
+                                <TextBox x:Name="setNewPassword" Text="{Binding Path=SetMewPassword}" 
+                                         Height="25" Background="White" Margin="10"/>
+                                <TextBox x:Name="CheckNewPassworSet" Text="{Binding Path=CheckNewPasswordSet}"
+                                         Height="25" Background="White" Margin="10"/>
+                                <Button Height="25"  Content="Сохранить новый пароль" Margin="10" 
+                                        Command="{Binding SaveNewPasswordCommand, Mode=OneWay}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1">
+                                <Button x:Name="showUIElementForSetNewPassword"
+                                        Content="Сменить пароль"
+                                        Width="150" Height="20" 
+                                        Visibility="Visible"
+                                        Click="showUIElementForSetNewPassword_Click"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1">
+                                <Button x:Name="showUIElementForEntrance"
+                                        Content="Назад"
+                                        Width="150" Height="20"  
+                                        Visibility="Collapsed"
+                                        Click="showUIElementForEntrance_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                    <!--#endregion-->
+                </Grid>
             </StackPanel>
         </Grid>
     </Grid>

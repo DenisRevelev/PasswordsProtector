@@ -36,5 +36,17 @@ namespace PasswordsProtector.Views
             const uint WDA_EXCLUDEFROMCAPTURE = 0x00000011;
             SetWindowDisplayAffinity(handle, WDA_EXCLUDEFROMCAPTURE);
         }
+
+        private void showUIElementForSetNewPassword_Click(object sender, RoutedEventArgs e)
+        {
+            showUIElementForSetNewPassword.Visibility = Visibility.Collapsed;
+            showUIElementForEntrance.Visibility = Visibility.Visible;
+        }
+
+        private void showUIElementForEntrance_Click(object sender, RoutedEventArgs e)
+        {
+            showUIElementForSetNewPassword.Visibility = Visibility.Visible;
+            showUIElementForEntrance.Visibility = Visibility.Collapsed;
+        }
     }
 }

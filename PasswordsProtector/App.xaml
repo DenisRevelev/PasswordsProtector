@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:PasswordsProtector"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Views/ResourceDictionary/ColorsDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionary/ButtonsDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
