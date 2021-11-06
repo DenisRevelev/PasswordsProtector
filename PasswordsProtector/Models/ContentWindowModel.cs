@@ -3,18 +3,32 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace PasswordsProtector.Models
 {
+    [XmlType(AnonymousType = true)]
     public class ContentWindowModel : INotifyPropertyChanged
     {
         #region FIELDS
         private string _urlSite;
         private string _login;
         private string _password;
+        private string _filter;
         #endregion
 
         #region PROPERTIES
+        [XmlAttribute]
+        public string Filter
+        {
+            get => _filter;
+            set
+            {
+                _filter = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string UrlSite
         {
             get => _urlSite;
