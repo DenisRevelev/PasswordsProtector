@@ -29,7 +29,8 @@
         <StackPanel Grid.Row="0" Panel.ZIndex="1" Orientation="Horizontal" FlowDirection="RightToLeft" >
             <Button Content="X" Width="20" Command="{Binding CloseApplicationCommand, Mode=OneWay}"/>
         </StackPanel>
-        <Grid Grid.RowSpan="2" Background="{StaticResource BasicColor}">
+        <Grid Grid.RowSpan="2" 
+              Background="{StaticResource BasicColor}">
             
             <StackPanel VerticalAlignment="Center">
                 <!--#region // Triggers for animation UI Elements-->

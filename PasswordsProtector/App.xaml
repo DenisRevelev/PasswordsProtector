@@ -8,6 +8,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Views/ResourceDictionary/ColorsDictionary.xaml"/>
                 <ResourceDictionary Source="Views/ResourceDictionary/ButtonsDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionary/TextBoxDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionary/TextBlockDictionary.xaml"/>
+                <ResourceDictionary Source="Views/ResourceDictionary/ListViewDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

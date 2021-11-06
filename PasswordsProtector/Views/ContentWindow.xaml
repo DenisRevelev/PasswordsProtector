@@ -6,43 +6,82 @@
         xmlns:local="clr-namespace:PasswordsProtector.ViewModels"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="ContentWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="ContentWindow" Height="650" Width="550" Loaded="Window_Loaded">
     <Window.Resources>
         <local:ContentWindowViewModel x:Key="myVW"/>
     </Window.Resources>
-    <StackPanel>
-        <Button Height="30" Command="{Binding AddData, Mode=OneWay, Source={StaticResource myVW}}"/>
-        <StackPanel>
-            <TextBox Text="{Binding Source={StaticResource myVW}, Path=UrlSiteVM}" Background="Gainsboro"/>
-            <TextBox Text="{Binding Source={StaticResource myVW}, Path=LoginVM}"/>
-            <TextBox Text="{Binding Source={StaticResource myVW}, Path=PasswordVM}"/>
+    <Grid Background="{StaticResource BasicColor}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <!--#region // Menu-->
+        <StackPanel Background="{StaticResource AdditionalColor}">
+            <TextBox x:Name="headingPage" Width="30" Text="{Binding Source={StaticResource myVW}, Path=ItemMenuVM}"/>
+            <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=MenuItemNames}"
+                      SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItem}"
+                      Background="{StaticResource BasicColor}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                    <Rectangle Fill="Azure" Height="25" Width="25"/>
+                                    <TextBlock Text="{Binding ItemMenu}"/>
+                                </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button Content="+" Height="30" Width="30" Command="{Binding AddItem, Mode=OneWay, Source={StaticResource myVW}}" />
         </StackPanel>
-        <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=EnteredData}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <VirtualizingStackPanel>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel>
-                                <TextBlock Text="URL:"/>
-                                <TextBlock Text="Login:"/>
-                                <TextBlock Text="Password:"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1"
+        <!--#endregion-->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
+            <StackPanel >
+                <TextBlock Text="{Binding Source={StaticResource myVW}, Path=ItemNameMenu}"/>
+            <Button Height="30" Command="{Binding AddData, Mode=OneWay, Source={StaticResource myVW}}"/>
+            <StackPanel>
+                <TextBox Text="{Binding Source={StaticResource myVW}, Path=UrlSiteVM}" Background="Gainsboro"/>
+                <TextBox Text="{Binding Source={StaticResource myVW}, Path=LoginVM}"/>
+                <TextBox Text="{Binding Source={StaticResource myVW}, Path=PasswordVM}"/>
+            </StackPanel>
+
+                <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=FilteredCollectionView}"
+                      Background="{StaticResource BasicColor}"
+                      BorderThickness="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <VirtualizingStackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="10"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.RowSpan="2" Margin="10,0,0,0">
+                                    <TextBlock Text="URL:"/>
+                                    <TextBlock Text="Login:"/>
+                                    <TextBlock Text="Password:"/>
+                                </StackPanel>
+                                <StackPanel Grid.RowSpan="2" Grid.Column="1"
                                         Margin="10,0,0,0">
-                                <TextBlock Text="{Binding UrlSite}"/>
-                                <TextBlock Text="{Binding Login}"/>
-                                <TextBlock Text="{Binding Password}"/>
-                            </StackPanel>
-                        </Grid>
-                        <Button Height="15" Command="{Binding DeleteData, Source={StaticResource myVW}, Mode=OneWay}" 
+                                    <TextBlock Text="{Binding UrlSite}"/>
+                                    <TextBlock Text="{Binding Login}"/>
+                                    <TextBlock Text="{Binding Password}"/>
+                                </StackPanel>
+                                <Button Grid.Column="2" Height="15" Command="{Binding DeleteData, Source={StaticResource myVW},
+                                    Mode=OneWay}" 
                                 CommandParameter="{Binding}"/>
-                    </VirtualizingStackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </StackPanel>
+                            </Grid>
+                        </VirtualizingStackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+           
+        </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </Window>
