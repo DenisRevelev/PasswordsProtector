@@ -13,6 +13,9 @@ using System.Windows;
 using System.Windows.Data;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using System.Drawing;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PasswordsProtector.ViewModels
 {
@@ -29,8 +32,21 @@ namespace PasswordsProtector.ViewModels
         private const string _fileNameForMenu = "Microsoft.Menu.xml";
         private ObservableCollection<ContentWindowModel> _enteredData;
         private ObservableCollection<ItemsMenuModel> _menuItemNames;
+        private ObservableCollection<ImageCollectionModel> _iconCollection;
         private const string _encryptElement = "ArrayOfContentWindowModel";
         #endregion
+
+        private string[] imagesList;
+        public ObservableCollection<ImageCollectionModel> IconCollection
+        {
+            get => _iconCollection;
+            set
+            {
+                _iconCollection = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         #region COMMANDS
         private RelayCommand _addData { get; set; }
@@ -71,6 +87,21 @@ namespace PasswordsProtector.ViewModels
                 });
             }
         }
+
+        private RelayCommand _deleteItem { get; set; }
+        public RelayCommand DeleteItem
+        {
+            get
+            {
+                return _deleteItem ?? new RelayCommand(parameter =>
+                {
+                    var data = (ItemsMenuModel)parameter;
+                    DeleteSelectMenuItem(data);
+                    SetFilterForCollection();
+                });
+            }
+        }
+
         #endregion
 
         #region CONSTRUCTORS
@@ -78,8 +109,20 @@ namespace PasswordsProtector.ViewModels
         {
             _enteredData = new ObservableCollection<ContentWindowModel>();
             _menuItemNames = new ObservableCollection<ItemsMenuModel>();
+            _iconCollection = new ObservableCollection<ImageCollectionModel>();
             if (!IsInDesignMode)
             {
+                imagesList = Directory.EnumerateFiles($"{Environment.CurrentDirectory}", "*.png",
+                SearchOption.AllDirectories).ToArray();
+
+                foreach (string pathImg in imagesList)
+                {
+                    IconCollection.Add(new ImageCollectionModel()
+                    {
+                        Icon = pathImg
+                    });
+                }
+
                 CheckFileExists();
             }
         }
@@ -202,11 +245,48 @@ namespace PasswordsProtector.ViewModels
             {
                 _selectedItem = value;
                 ItemNameMenu = value.ItemMenu;
+                ImageCategoryTop = value.ImageItem;
                 SetFilterForCollection();
                 OnPropertyChanged();
             }
         }
 
+        private ImageCollectionModel _selectedItemInComboBox;
+
+        public ImageCollectionModel SelectedItemInComboBox
+        {
+            get => _selectedItemInComboBox;
+            set
+            {
+                _selectedItemInComboBox = value;
+                ImageCategory = value.Icon;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _imageCategory;
+
+        public string ImageCategory
+        {
+            get => _imageCategory;
+            set
+            {
+                _imageCategory = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _imageCategoryTop;
+
+        public string ImageCategoryTop
+        {
+            get => _imageCategoryTop;
+            set
+            {
+                _imageCategoryTop = value;
+                OnPropertyChanged();
+            }
+        }
         /// <summary>
         /// Gets the name of the selected menu item.
         /// </summary>
@@ -287,6 +367,11 @@ namespace PasswordsProtector.ViewModels
             SaveEndEcryptFile();
         }
 
+        private void DeleteSelectMenuItem(ItemsMenuModel item)
+        {
+            MenuItemNames.Remove(item);
+            SaveEndEcryptFile();
+        }
         /// <summary>
         /// Saves the data added to the collection to an xml file.
         /// And then it encrypts the file.
@@ -305,7 +390,8 @@ namespace PasswordsProtector.ViewModels
         {
             MenuItemNames.Add(new ItemsMenuModel
             {
-                ItemMenu = ItemMenuVM
+                ItemMenu = ItemMenuVM,
+                ImageItem = ImageCategory
             });
             ItemNameMenu = ItemMenuVM;
             SaveEndEcryptFile();

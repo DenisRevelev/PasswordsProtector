@@ -6,82 +6,139 @@
         xmlns:local="clr-namespace:PasswordsProtector.ViewModels"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="ContentWindow" Height="650" Width="550" Loaded="Window_Loaded">
+        Title="ContentWindow" Height="550" Width="750" Loaded="Window_Loaded">
     <Window.Resources>
         <local:ContentWindowViewModel x:Key="myVW"/>
     </Window.Resources>
     <Grid Background="{StaticResource BasicColor}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!--#region // Menu-->
         <StackPanel Background="{StaticResource AdditionalColor}">
-            <TextBox x:Name="headingPage" Width="30" Text="{Binding Source={StaticResource myVW}, Path=ItemMenuVM}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ComboBox ItemsSource="{Binding Source={StaticResource myVW}, Path=IconCollection}"
+                          SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItemInComboBox}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel Orientation="Horizontal">
+                                <Image Source="{Binding Icon}"
+                                   Height="32"
+                                   Width="32" Stretch="Fill"/>
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBox x:Name="headingPage" Width="30" Text="{Binding Source={StaticResource myVW}, Path=ItemMenuVM}"/>
+                <Button Content="+" Height="30" Width="30" Command="{Binding AddItem, Mode=OneWay, Source={StaticResource myVW}}" />
+            </StackPanel>
             <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=MenuItemNames}"
-                      SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItem}"
-                      Background="{StaticResource BasicColor}">
+                      SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItem}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                    <Rectangle Fill="Azure" Height="25" Width="25"/>
-                                    <TextBlock Text="{Binding ItemMenu}"/>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding ImageItem}" Height="32" Width="32"/>
+                                    <TextBlock Text="{Binding ItemMenu}"
+                                               Margin="5"/>
                                 </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Button Command="{Binding DeleteItem, Source={StaticResource myVW},
+                                                Mode=OneWay}" 
+                                                CommandParameter="{Binding}"
+                                                Height="25"
+                                                Width="25"
+                                            Margin="5">
+                                        <Image Source="/Resources/Images/delete.png" Height="20"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Content="+" Height="30" Width="30" Command="{Binding AddItem, Mode=OneWay, Source={StaticResource myVW}}" />
         </StackPanel>
         <!--#endregion-->
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
-            <StackPanel >
-                <TextBlock Text="{Binding Source={StaticResource myVW}, Path=ItemNameMenu}"/>
-            <Button Height="30" Command="{Binding AddData, Mode=OneWay, Source={StaticResource myVW}}"/>
             <StackPanel>
-                <TextBox Text="{Binding Source={StaticResource myVW}, Path=UrlSiteVM}" Background="Gainsboro"/>
-                <TextBox Text="{Binding Source={StaticResource myVW}, Path=LoginVM}"/>
-                <TextBox Text="{Binding Source={StaticResource myVW}, Path=PasswordVM}"/>
-            </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <Image Source="{Binding Source={StaticResource myVW}, Path=ImageCategoryTop}" 
+                           Height="25" 
+                           Width="25"
+                           Margin="0,0,5,0"/>
+                    <TextBlock Text="{Binding Source={StaticResource myVW}, Path=ItemNameMenu}"
+                               Margin="5,5,5,5"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=UrlSiteVM}"/>
+                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=LoginVM}"/>
+                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=PasswordVM}"/>
+                    <Button Height="30" 
+                            Width="100"
+                            Content="Save"
+                            Command="{Binding AddData, Mode=OneWay, Source={StaticResource myVW}}"/>
+                </StackPanel>
 
+                <!--#region // Collection Data-->
                 <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=FilteredCollectionView}"
-                      Background="{StaticResource BasicColor}"
-                      BorderThickness="0">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <VirtualizingStackPanel>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="10"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="10"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <StackPanel Grid.RowSpan="2" Margin="10,0,0,0">
-                                    <TextBlock Text="URL:"/>
-                                    <TextBlock Text="Login:"/>
-                                    <TextBlock Text="Password:"/>
-                                </StackPanel>
-                                <StackPanel Grid.RowSpan="2" Grid.Column="1"
-                                        Margin="10,0,0,0">
-                                    <TextBlock Text="{Binding UrlSite}"/>
-                                    <TextBlock Text="{Binding Login}"/>
-                                    <TextBlock Text="{Binding Password}"/>
-                                </StackPanel>
-                                <Button Grid.Column="2" Height="15" Command="{Binding DeleteData, Source={StaticResource myVW},
-                                    Mode=OneWay}" 
-                                CommandParameter="{Binding}"/>
-                            </Grid>
-                        </VirtualizingStackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-           
-        </StackPanel>
+                          Background="{StaticResource BasicColor}"
+                          BorderThickness="0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <VirtualizingStackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Margin="10,0,0,0">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Image Source="/Resources/Images/web.png" Height="20"/>
+                                            <TextBlock Text="{Binding UrlSite}" Margin="10,0,0,0"/>
+                                        </StackPanel>
+                                        <Line X1="10" X2="100" 
+                                              Stretch="Fill" 
+                                              StrokeThickness="1" 
+                                              Stroke="{StaticResource AdditionalColor}" Margin="20,0,0,0"/>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Image Source="/Resources/Images/login.png" Height="20"/>
+                                            <TextBlock Text="{Binding Login}" Margin="10,0,0,0"/>
+                                        </StackPanel>
+                                        <Line X1="10" X2="100" 
+                                              Stretch="Fill" 
+                                              StrokeThickness="1" 
+                                              Stroke="{StaticResource AdditionalColor}" Margin="20,0,0,0"/>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Image Source="/Resources/Images/password.png" Height="20"/>
+                                            <TextBlock Text="{Binding Password}" Margin="10,0,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Button Grid.Column="1"
+                                            Height="25"
+                                            Width="25"
+                                            Background="Transparent"
+                                            Command="{Binding DeleteData, Source={StaticResource myVW},
+                                            Mode=OneWay}" 
+                                            CommandParameter="{Binding}">
+                                        <Image Source="/Resources/Images/delete.png" Height="20"/>
+                                    </Button>
+                                </Grid>
+                            </VirtualizingStackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <!--#endregion-->
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </Window>

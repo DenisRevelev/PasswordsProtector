@@ -44,7 +44,8 @@ namespace PasswordsProtector.Models.Services
         {
             return new ItemsMenuModel
             {
-                ItemMenu = node.SelectSingleNode("ItemMenu").Value
+                ItemMenu = node.SelectSingleNode("ItemMenu").Value,
+                ImageItem = node.SelectSingleNode("ImageItem").Value
             };
         }
     }

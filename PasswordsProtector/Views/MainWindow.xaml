@@ -65,7 +65,7 @@
                     <StackPanel VerticalAlignment="Center">
                         <TextBox x:Name="passwordCheck"
                              Text="{Binding Path=CheckPassword}" 
-                             Height="25" Background="White" Margin="10"/>
+                             Height="25" Background="White"/>
                         <Button  Command="{Binding PasswordValidationCommand, Mode=OneWay}"
                              Height="25" Content="Вход" Margin="10"/>
                     </StackPanel>

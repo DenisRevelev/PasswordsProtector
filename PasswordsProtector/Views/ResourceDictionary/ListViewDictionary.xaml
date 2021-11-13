@@ -1,16 +1,34 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+
+    <Style TargetType="{x:Type ListView}">
+        <Setter Property="Background" Value="{StaticResource AdditionalColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AdditionalColor}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
     <Style TargetType="{x:Type ListViewItem}">
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect RenderingBias="Quality" 
+                                  ShadowDepth="0" 
+                                  Color="Black"
+                                  BlurRadius="15"
+                                  Opacity="0.4"
+                                  Direction="180"/>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListViewItem">
                     <Border x:Name="Border"
-                            CornerRadius="10"
-                            Margin="0,1,0,1"
+                            CornerRadius="3"
+                            Margin="10,2,10,2"
                             BorderThickness="1"
+                            Height="Auto"
+                            Width="Auto"
                             Background="{StaticResource BasicColor}"
-                            BorderBrush="{StaticResource FocusedColor}">
+                            BorderBrush="{StaticResource AdditionalColor}">
+
                         <ContentPresenter  SnapsToDevicePixels="True"
                                            Margin="2"
                                            HorizontalAlignment="Stretch"
@@ -18,16 +36,15 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PressedColor}"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BasicColor}"/>
                             <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource AdditionalColor2}"/>
+                            <Setter TargetName="Border" Property="CornerRadius" Value="5"/>
+                            <Setter TargetName="Border" Property="BorderThickness" Value="2"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PressedColor}"/>
-                        </Trigger>
-                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource BasicColor}"/>
                             <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource FocusedColor}"/>
+                            <Setter TargetName="Border" Property="CornerRadius" Value="10"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

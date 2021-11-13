@@ -1,32 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PasswordsProtector.Models
 {
-    public class ItemsMenuModel : INotifyPropertyChanged 
+    public class ImageCollectionModel : INotifyPropertyChanged
     {
-        private string _itemMenu;
-        private string _imageItem;
+        private string _icon;
 
-        public string ItemMenu
+        public string Icon
         {
-            get => _itemMenu;
+            get => _icon;
             set
             {
-                _itemMenu = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string ImageItem
-        {
-            get => _imageItem;
-            set
-            {
-                _imageItem = value;
+                _icon = value;
                 OnPropertyChanged();
             }
         }

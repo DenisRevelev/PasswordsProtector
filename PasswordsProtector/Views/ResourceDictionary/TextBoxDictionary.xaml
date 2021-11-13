@@ -4,6 +4,7 @@
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="Foreground"  Value="{StaticResource ForegroundColor}" />
         <Setter Property="FontSize"  Value="18" />
+        <Setter Property="Margin" Value="5"/>
         <Setter Property="SnapsToDevicePixels"  Value="True" />
         <Setter Property="VerticalContentAlignment"  Value="Center" />
         <Setter Property="CaretBrush"  Value="{StaticResource  ForegroundColor}" />
@@ -17,19 +18,19 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBoxBase}">
                     <Border Name="Border"
-                            CornerRadius="1"
+                            CornerRadius="3"
                             Padding="2"
                             BorderThickness="1"
-                            BorderBrush="{StaticResource BasicColor}"
-                            Background="{StaticResource  AdditionalColor}">
+                            BorderBrush="{StaticResource AdditionalColor}"
+                            Background="{StaticResource  BasicColor}">
                         <ScrollViewer Margin="0"  x:Name="PART_ContentHost" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource FocusedColor}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource FocusedColor}"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PressedColor}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource AdditionalColor2}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

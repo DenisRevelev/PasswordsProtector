@@ -9,8 +9,8 @@
                     <Border x:Name="Border"
                             CornerRadius="1"
                             BorderThickness="1"
-                            Background="{StaticResource AdditionalColor}"
-                            BorderBrush="{StaticResource FocusedColor}">
+                            Background="{StaticResource AdditionalColor2}"
+                            BorderBrush="{StaticResource AdditionalColor}">
                         <ContentPresenter  SnapsToDevicePixels="True"
                                            Margin="2"
                                            HorizontalAlignment="Center"
@@ -30,7 +30,7 @@
                             <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource PressedColor}"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PressedColor}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource FocusedColor}"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource FocusedColor}"/>
