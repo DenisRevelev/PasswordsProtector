@@ -18,7 +18,7 @@
         <!--#region // Menu-->
         <StackPanel Background="{StaticResource AdditionalColor}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <ComboBox ItemsSource="{Binding Source={StaticResource myVW}, Path=IconCollection}"
+                <ComboBox ItemsSource="{Binding Source={StaticResource myVW}, Path=IconCollectionView}"
                           SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItemInComboBox}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -33,8 +33,10 @@
                 <TextBox x:Name="headingPage" Width="30" Text="{Binding Source={StaticResource myVW}, Path=ItemMenuVM}"/>
                 <Button Content="+" Height="30" Width="30" Command="{Binding AddItem, Mode=OneWay, Source={StaticResource myVW}}" />
             </StackPanel>
+            <Button  Width="Auto" Height="25" Command="{Binding AllItemCollectionData, Mode=OneWay, Source={StaticResource myVW}}"
+                     CommandParameter="{Binding}"/>
             <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=MenuItemNames}"
-                      SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItem}">
+                      SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItemMenu}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
 
@@ -90,6 +92,8 @@
 
                 <!--#region // Collection Data-->
                 <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=FilteredCollectionView}"
+                          SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItemContent}"
+                          SelectionMode="Multiple"
                           Background="{StaticResource BasicColor}"
                           BorderThickness="0">
                     <ListView.ItemTemplate>
@@ -123,8 +127,8 @@
                                             <TextBlock Text="{Binding Password}" Margin="10,0,0,0"/>
                                         </StackPanel>
                                     </StackPanel>
-                                    <Button Grid.Column="1"
-                                            Height="25"
+                                    <StackPanel Grid.Column="1">
+                                    <Button Height="25"
                                             Width="25"
                                             Background="Transparent"
                                             Command="{Binding DeleteData, Source={StaticResource myVW},
@@ -132,6 +136,16 @@
                                             CommandParameter="{Binding}">
                                         <Image Source="/Resources/Images/delete.png" Height="20"/>
                                     </Button>
+                                    <Button Height="25"
+                                            Width="25"
+                                            Background="Transparent"
+                                            Command="{Binding EditData, Source={StaticResource myVW},
+                                            Mode=OneWay}" 
+                                            CommandParameter="{Binding}"
+                                            IsEnabled="{Binding Source={StaticResource myVW}, Path=IsEnabledButton}">
+                                        <Image Source="/Resources/Images/edit.png" Height="20"/>
+                                    </Button>
+                                    </StackPanel>
                                 </Grid>
                             </VirtualizingStackPanel>
                         </DataTemplate>

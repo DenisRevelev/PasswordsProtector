@@ -2,7 +2,6 @@
 using PasswordsProtector.Models.Commands;
 using PasswordsProtector.Models.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -11,42 +10,16 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
-using System.Xml.Linq;
-using System.Xml.XPath;
-using System.Drawing;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace PasswordsProtector.ViewModels
 {
     public class ContentWindowViewModel : INotifyPropertyChanged
     {
         #region FIELDS
-        private string _urlSite = "";
-        private string _login = "";
-        private string _password = "";
-        private string _itemMenu;
-        private string _itemNameMenu;
-        private ItemsMenuModel _selectedItem;
-        private const string _fileName = "Microsoft.CodeAnalysis.xml";
-        private const string _fileNameForMenu = "Microsoft.Menu.xml";
         private ObservableCollection<ContentWindowModel> _enteredData;
         private ObservableCollection<ItemsMenuModel> _menuItemNames;
-        private ObservableCollection<ImageCollectionModel> _iconCollection;
-        private const string _encryptElement = "ArrayOfContentWindowModel";
+        private ObservableCollection<ImageCollectionModel> _iconCollectionView;
         #endregion
-
-        private string[] imagesList;
-        public ObservableCollection<ImageCollectionModel> IconCollection
-        {
-            get => _iconCollection;
-            set
-            {
-                _iconCollection = value;
-                OnPropertyChanged();
-            }
-        }
-
 
         #region COMMANDS
         private RelayCommand _addData { get; set; }
@@ -102,6 +75,37 @@ namespace PasswordsProtector.ViewModels
             }
         }
 
+        private RelayCommand _allItemCollectionData { get; set; }
+
+        public RelayCommand AllItemCollectionData
+        {
+            get
+            {
+                return _allItemCollectionData ?? new RelayCommand(parameter =>
+                {
+                    ReturnAllItemCollection();
+                });
+            }
+        }
+
+        private RelayCommand _editData { get; set; }
+
+        public RelayCommand EditData
+        {
+            get
+            {
+                return _editData ?? new RelayCommand(parameter =>
+                {
+                    UrlSiteVM = SelectedItemContent.UrlSite;
+                    LoginVM = SelectedItemContent.Login;
+                    PasswordVM = SelectedItemContent.Password;
+                    ItemNameMenu = SelectedItemContent.Filter;
+
+                    var data = (ContentWindowModel)parameter;
+                    DeleteData.Execute(data);
+                });
+            }
+        }
         #endregion
 
         #region CONSTRUCTORS
@@ -109,26 +113,62 @@ namespace PasswordsProtector.ViewModels
         {
             _enteredData = new ObservableCollection<ContentWindowModel>();
             _menuItemNames = new ObservableCollection<ItemsMenuModel>();
-            _iconCollection = new ObservableCollection<ImageCollectionModel>();
+            _iconCollectionView = new ObservableCollection<ImageCollectionModel>();
             if (!IsInDesignMode)
             {
-                imagesList = Directory.EnumerateFiles($"{Environment.CurrentDirectory}", "*.png",
-                SearchOption.AllDirectories).ToArray();
-
-                foreach (string pathImg in imagesList)
-                {
-                    IconCollection.Add(new ImageCollectionModel()
-                    {
-                        Icon = pathImg
-                    });
-                }
-
+                GetIcons();
                 CheckFileExists();
             }
         }
+
+
         #endregion
 
         #region PROPERTIES
+        /// <summary>
+        /// Contains a set of icons for the menu.
+        /// </summary>
+        public ObservableCollection<ImageCollectionModel> IconCollectionView
+        {
+            get => _iconCollectionView;
+            set
+            {
+                _iconCollectionView = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ContentWindowModel _selectedItemContent;
+        /// <summary>
+        /// The selected item accesses the model "ContentWindowModel".
+        /// </summary>
+        public ContentWindowModel SelectedItemContent
+        {
+            get => _selectedItemContent;
+            set
+            {
+                _selectedItemContent = value;
+                if (value == null)
+                    IsEnabledButton = false;
+                else
+                    IsEnabledButton = true;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isEnabletButton = false;
+        /// <summary>
+        /// The button is inactive until an item is selected in the collection.
+        /// </summary>
+        public bool IsEnabledButton
+        {
+            get => _isEnabletButton;
+            set
+            {
+                _isEnabletButton = value;
+                OnPropertyChanged();
+            }
+        }
         /// <summary>
         /// For the XAML constructor to work correctly.
         /// </summary>
@@ -179,6 +219,8 @@ namespace PasswordsProtector.ViewModels
                 return CollectionViewSource.GetDefaultView(EnteredData);
             }
         }
+
+        private string _itemMenu;
         /// <summary>
         /// Gets the user-entered name for the menu item.
         /// </summary>
@@ -192,21 +234,23 @@ namespace PasswordsProtector.ViewModels
             }
         }
 
+        private string _urlSite = "";
         /// <summary>
         /// Gets the user-entered utl of the site.
         /// </summary>
         public string UrlSiteVM
         {
-            get => _urlSite;
+            get =>_urlSite;
             set
             {
-                _urlSite = CryptographyDataInMemory.EncryptDataInMemory(value);
+                _urlSite = value;
                 if (value != string.Empty) value = string.Empty;
 
                 OnPropertyChanged();
             }
         }
 
+        private string _login = "";
         /// <summary>
         /// Gets the login entered by the user.
         /// </summary>
@@ -215,12 +259,13 @@ namespace PasswordsProtector.ViewModels
             get => _login;
             set
             {
-                _login = CryptographyDataInMemory.EncryptDataInMemory(value);
+                _login = value;
                 if (value != string.Empty) value = string.Empty;
                 OnPropertyChanged();
             }
         }
 
+        private string _password = "";
         /// <summary>
         /// Gets the password entered by the user.
         /// </summary>
@@ -229,16 +274,17 @@ namespace PasswordsProtector.ViewModels
             get => _password;
             set
             {
-                _password = CryptographyDataInMemory.EncryptDataInMemory(value);
+                _password = value;
                 if (value != string.Empty) value = string.Empty;
                 OnPropertyChanged();
             }
         }
 
+        private ItemsMenuModel _selectedItem;
         /// <summary>
-        /// The selected item accesses the menu model.
+        /// The selected item accesses the model "ItemsMenuModel".
         /// </summary>
-        public ItemsMenuModel SelectedItem
+        public ItemsMenuModel SelectedItemMenu
         {
             get => _selectedItem;
             set
@@ -287,6 +333,8 @@ namespace PasswordsProtector.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private string _itemNameMenu;
         /// <summary>
         /// Gets the name of the selected menu item.
         /// </summary>
@@ -302,6 +350,10 @@ namespace PasswordsProtector.ViewModels
         #endregion
 
         #region METHODS
+        private const string _fileName = "Microsoft.CodeAnalysis.xml";
+        private const string _fileNameForMenu = "Microsoft.Menu.xml";
+        private const string _encryptElement = "ArrayOfContentWindowModel";
+        private string[] imagesList;
 
         /// <summary>
         /// Check for xml file with passwords. If it is, then it creates a new, empty file.
@@ -320,6 +372,23 @@ namespace PasswordsProtector.ViewModels
                 EnteredData = LoadingData.LoadData(_fileName);
                 MenuItemNames = LoadingData.LoadMenu(_fileNameForMenu);
                 CryptographyXml.EcryptXml(_encryptElement, _fileName);
+            }
+        }
+
+        /// <summary>
+        /// Gets icons from a folder.
+        /// </summary>
+        private void GetIcons()
+        {
+            imagesList = Directory.EnumerateFiles($"{Environment.CurrentDirectory}", "*.png",
+               SearchOption.AllDirectories).ToArray();
+
+            foreach (string pathImg in imagesList)
+            {
+                IconCollectionView.Add(new ImageCollectionModel()
+                {
+                    Icon = pathImg
+                });
             }
         }
 
@@ -349,9 +418,9 @@ namespace PasswordsProtector.ViewModels
             else
             {
                 EnteredData.Add(new ContentWindowModel {
-                    UrlSite = CryptographyDataInMemory.DecryptDataInMemory(UrlSiteVM),
-                    Login = CryptographyDataInMemory.DecryptDataInMemory(LoginVM), 
-                    Password = CryptographyDataInMemory.DecryptDataInMemory(PasswordVM),
+                    UrlSite = UrlSiteVM,
+                    Login = LoginVM, 
+                    Password = PasswordVM,
                     Filter = ItemNameMenu});
                 SaveEndEcryptFile();
             }
@@ -367,11 +436,16 @@ namespace PasswordsProtector.ViewModels
             SaveEndEcryptFile();
         }
 
+        /// <summary>
+        /// Deletes the selected menu item.
+        /// </summary>
+        /// <param name="item"></param>
         private void DeleteSelectMenuItem(ItemsMenuModel item)
         {
             MenuItemNames.Remove(item);
             SaveEndEcryptFile();
         }
+
         /// <summary>
         /// Saves the data added to the collection to an xml file.
         /// And then it encrypts the file.
@@ -417,6 +491,19 @@ namespace PasswordsProtector.ViewModels
                 return true;
             else
                 return false;
+        }
+
+        /// <summary>
+        /// Returns all elements of the content collection.
+        /// </summary>
+        private void ReturnAllItemCollection()
+        {
+            FilteredCollectionView.Filter = AllItemCollection;
+        }
+
+        private bool AllItemCollection(object o)
+        {
+            return true;
         }
         #endregion
 
