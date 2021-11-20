@@ -3,15 +3,12 @@ using PasswordsProtector.Models.Commands;
 using PasswordsProtector.Models.Interfaces;
 using PasswordsProtector.Models.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Xml.Linq;
 
 namespace PasswordsProtector.ViewModels
@@ -37,7 +34,7 @@ namespace PasswordsProtector.ViewModels
             {
                 return _savNewePasswordCommand ?? new RelayCommand(async parameter =>
                 {
-                   await SaveNewPasswordAsync();
+                    await SaveNewPasswordAsync();
                 });
             }
         }
@@ -59,10 +56,10 @@ namespace PasswordsProtector.ViewModels
         {
             get
             {
-                return _checkPasswordWhenClosingWindow ?? new RelayCommand( async parameter => 
-                { 
-                    await CheckPasswordWhenClosingWindowAsync(); 
-                });
+                return _checkPasswordWhenClosingWindow ?? new RelayCommand(async parameter =>
+               {
+                   await CheckPasswordWhenClosingWindowAsync();
+               });
             }
         }
 

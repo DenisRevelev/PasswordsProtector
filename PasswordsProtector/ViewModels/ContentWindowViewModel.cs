@@ -1,5 +1,6 @@
 ﻿using PasswordsProtector.Models;
 using PasswordsProtector.Models.Commands;
+using PasswordsProtector.Models.Interfaces;
 using PasswordsProtector.Models.Services;
 using System;
 using System.Collections.ObjectModel;
@@ -7,13 +8,13 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
 namespace PasswordsProtector.ViewModels
 {
-    public class ContentWindowViewModel : INotifyPropertyChanged
+    public class ContentWindowViewModel : INotifyPropertyChanged, IAsyncInitialization
     {
         #region FIELDS
         private ObservableCollection<ContentWindowModel> _enteredData;
@@ -28,10 +29,10 @@ namespace PasswordsProtector.ViewModels
             get
             {
                 return _addData ?? new RelayCommand(parameter =>
-                {
-                    AddEnteredData();
-                    SetFilterForCollection();
-                });
+               {
+                   AddEnteredData();
+                   SetFilterForCollection();
+               });
             }
         }
 
@@ -41,11 +42,11 @@ namespace PasswordsProtector.ViewModels
             get
             {
                 return _deleteData ?? new RelayCommand(parameter =>
-                {
-                    var data = (ContentWindowModel)parameter;
-                    DeleteSelectedData(data);
-                    SetFilterForCollection();
-                });
+               {
+                   var data = (ContentWindowModel)parameter;
+                   DeleteSelectedData(data);
+                   SetFilterForCollection();
+               });
             }
         }
 
@@ -55,9 +56,9 @@ namespace PasswordsProtector.ViewModels
             get
             {
                 return _addItem ?? new RelayCommand(parameter =>
-                {
-                    AddNewItemInMenu();
-                });
+               {
+                   AddNewItemInMenu();
+               });
             }
         }
 
@@ -67,11 +68,11 @@ namespace PasswordsProtector.ViewModels
             get
             {
                 return _deleteItem ?? new RelayCommand(parameter =>
-                {
-                    var data = (ItemsMenuModel)parameter;
-                    DeleteSelectMenuItem(data);
-                    SetFilterForCollection();
-                });
+               {
+                   var data = (ItemsMenuModel)parameter;
+                   DeleteSelectMenuItem(data);
+                   SetFilterForCollection();
+               });
             }
         }
 
@@ -96,9 +97,9 @@ namespace PasswordsProtector.ViewModels
             {
                 return _editData ?? new RelayCommand(parameter =>
                 {
-                    UrlSiteVM = SelectedItemContent.UrlSite;
-                    LoginVM = SelectedItemContent.Login;
-                    PasswordVM = SelectedItemContent.Password;
+                    UrlSiteView = SelectedItemContent.UrlSite;
+                    LoginView = SelectedItemContent.Login;
+                    PasswordView = SelectedItemContent.Password;
                     ItemNameMenu = SelectedItemContent.Filter;
 
                     var data = (ContentWindowModel)parameter;
@@ -116,8 +117,8 @@ namespace PasswordsProtector.ViewModels
             _iconCollectionView = new ObservableCollection<ImageCollectionModel>();
             if (!IsInDesignMode)
             {
-                GetIcons();
-                CheckFileExists();
+                Initialization = InitializeAsync();
+                CheckFileExistsAsync();
             }
         }
 
@@ -234,47 +235,47 @@ namespace PasswordsProtector.ViewModels
             }
         }
 
-        private string _urlSite = "";
+        private string _urlSiteView = "";
         /// <summary>
         /// Gets the user-entered utl of the site.
         /// </summary>
-        public string UrlSiteVM
+        public string UrlSiteView
         {
-            get =>_urlSite;
+            get => _urlSiteView;
             set
             {
-                _urlSite = value;
+                _urlSiteView = value;
                 if (value != string.Empty) value = string.Empty;
 
                 OnPropertyChanged();
             }
         }
 
-        private string _login = "";
+        private string _loginView = "";
         /// <summary>
         /// Gets the login entered by the user.
         /// </summary>
-        public string LoginVM
+        public string LoginView
         {
-            get => _login;
+            get => _loginView;
             set
             {
-                _login = value;
+                _loginView = value;
                 if (value != string.Empty) value = string.Empty;
                 OnPropertyChanged();
             }
         }
 
-        private string _password = "";
+        private string _passwordView = "";
         /// <summary>
         /// Gets the password entered by the user.
         /// </summary>
-        public string PasswordVM
+        public string PasswordView
         {
-            get => _password;
+            get => _passwordView;
             set
             {
-                _password = value;
+                _passwordView = value;
                 if (value != string.Empty) value = string.Empty;
                 OnPropertyChanged();
             }
@@ -347,6 +348,8 @@ namespace PasswordsProtector.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public Task Initialization { get; private set; }
         #endregion
 
         #region METHODS
@@ -355,11 +358,17 @@ namespace PasswordsProtector.ViewModels
         private const string _encryptElement = "ArrayOfContentWindowModel";
         private string[] imagesList;
 
+        private async Task InitializeAsync()
+        {
+            await GetIconsAsync();
+            //await CheckFileExistsAsync();
+        }
+
         /// <summary>
         /// Check for xml file with passwords. If it is, then it creates a new, empty file.
         /// If so, it loads data from it.
         /// </summary>
-        private void CheckFileExists()
+        private void CheckFileExistsAsync()
         {
             var fileEx = File.Exists(_fileName);
             if (!fileEx)
@@ -368,20 +377,21 @@ namespace PasswordsProtector.ViewModels
             }
             else
             {
-                CryptographyXml.DecryptXml(_fileName);
+                //CryptographyXml.DecryptXml(_fileName);
                 EnteredData = LoadingData.LoadData(_fileName);
                 MenuItemNames = LoadingData.LoadMenu(_fileNameForMenu);
-                CryptographyXml.EcryptXml(_encryptElement, _fileName);
+                ReturnAllItemCollection();
+                //CryptographyXml.EcryptXml(_encryptElement, _fileName);
             }
         }
 
         /// <summary>
         /// Gets icons from a folder.
         /// </summary>
-        private void GetIcons()
+        private async Task GetIconsAsync()
         {
-            imagesList = Directory.EnumerateFiles($"{Environment.CurrentDirectory}", "*.png",
-               SearchOption.AllDirectories).ToArray();
+            imagesList = await Task.Run(() => Directory.EnumerateFiles($"{Environment.CurrentDirectory}", "*.png",
+               SearchOption.AllDirectories).ToArray());
 
             foreach (string pathImg in imagesList)
             {
@@ -399,7 +409,7 @@ namespace PasswordsProtector.ViewModels
         private bool CheckFieldsEmptiness()
         {
             var boolCheck = false;
-            if (UrlSiteVM == string.Empty || LoginVM == string.Empty || PasswordVM == string.Empty)
+            if (UrlSiteView == string.Empty || LoginView == string.Empty || PasswordView == string.Empty)
             {
                 boolCheck = true;
             }
@@ -417,11 +427,13 @@ namespace PasswordsProtector.ViewModels
             }
             else
             {
-                EnteredData.Add(new ContentWindowModel {
-                    UrlSite = UrlSiteVM,
-                    Login = LoginVM, 
-                    Password = PasswordVM,
-                    Filter = ItemNameMenu});
+                EnteredData.Add(new ContentWindowModel
+                {
+                    UrlSite = UrlSiteView,
+                    Login = LoginView,
+                    Password = PasswordView,
+                    Filter = ItemNameMenu
+                });
                 SaveEndEcryptFile();
             }
         }
@@ -454,7 +466,7 @@ namespace PasswordsProtector.ViewModels
         {
             SaveData.SaveCollectionData(EnteredData, _fileName);
             SaveData.SaveCollectionData(MenuItemNames, _fileNameForMenu);
-            CryptographyXml.EcryptXml(_encryptElement, _fileName);
+            //CryptographyXml.EcryptXml(_encryptElement, _fileName);
         }
 
         /// <summary>

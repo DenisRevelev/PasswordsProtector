@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace PasswordsProtector.Models
 {
-    public class ItemsMenuModel : INotifyPropertyChanged 
+    public class ItemsMenuModel : INotifyPropertyChanged
     {
         private string _itemMenu;
         private string _imageItem;

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
-using System.Text;
 using System.Windows;
 using System.Xml;
 

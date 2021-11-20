@@ -35,6 +35,7 @@
             </StackPanel>
             <Button  Width="Auto" Height="25" Command="{Binding AllItemCollectionData, Mode=OneWay, Source={StaticResource myVW}}"
                      CommandParameter="{Binding}"/>
+            
             <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=MenuItemNames}"
                       SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItemMenu}">
                 <ListView.ItemTemplate>
@@ -81,9 +82,17 @@
                                Margin="5,5,5,5"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=UrlSiteVM}"/>
-                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=LoginVM}"/>
-                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=PasswordVM}"/>
+                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=UrlSiteView}"/>
+                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=LoginView}"/>
+                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=PasswordView}"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource myVW}, Path=MenuItemNames}"
+                              SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItemMenu}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ItemMenu}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <Button Height="30" 
                             Width="100"
                             Content="Save"
@@ -108,7 +117,7 @@
                                     <StackPanel Margin="10,0,0,0">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Image Source="/Resources/Images/web.png" Height="20"/>
-                                            <TextBlock Text="{Binding UrlSite}" Margin="10,0,0,0"/>
+                                            <TextBox Text="{Binding UrlSite}" Margin="10,0,0,0" IsReadOnly="True"/>
                                         </StackPanel>
                                         <Line X1="10" X2="100" 
                                               Stretch="Fill" 
@@ -116,7 +125,7 @@
                                               Stroke="{StaticResource AdditionalColor}" Margin="20,0,0,0"/>
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Image Source="/Resources/Images/login.png" Height="20"/>
-                                            <TextBlock Text="{Binding Login}" Margin="10,0,0,0"/>
+                                            <TextBox Text="{Binding Login}" Margin="10,0,0,0" IsReadOnly="True"/>
                                         </StackPanel>
                                         <Line X1="10" X2="100" 
                                               Stretch="Fill" 
@@ -124,7 +133,7 @@
                                               Stroke="{StaticResource AdditionalColor}" Margin="20,0,0,0"/>
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Image Source="/Resources/Images/password.png" Height="20"/>
-                                            <TextBlock Text="{Binding Password}" Margin="10,0,0,0"/>
+                                            <TextBox Text="{Binding Password}" Margin="10,0,0,0" IsReadOnly="True"/>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Grid.Column="1">
