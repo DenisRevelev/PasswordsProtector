@@ -12,7 +12,7 @@
     </Window.Resources>
     <Grid Background="{StaticResource BasicColor}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!--#region // Menu-->
@@ -22,19 +22,36 @@
                           SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItemInComboBox}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <WrapPanel Orientation="Horizontal">
-                                <Image Source="{Binding Icon}"
+                            <Image Source="{Binding Icon}"
+                                   SnapsToDevicePixels="True"
                                    Height="32"
                                    Width="32" Stretch="Fill"/>
-                            </WrapPanel>
+
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <TextBox x:Name="headingPage" Width="30" Text="{Binding Source={StaticResource myVW}, Path=ItemMenuVM}"/>
-                <Button Content="+" Height="30" Width="30" Command="{Binding AddItem, Mode=OneWay, Source={StaticResource myVW}}" />
+                <TextBox x:Name="headingPage" Width="30" Text="{Binding Source={StaticResource myVW}, Path=ItemMenuVM}"
+                         Style="{StaticResource textBox}"/>
+                <Button Height="30"
+                        Width="30" 
+                        Command="{Binding AddItem, Mode=OneWay, Source={StaticResource myVW}}">
+                    <Image Source="/Resources/Images/plus.png" 
+                           SnapsToDevicePixels="True"
+                           Height="16"/>
+                </Button>
             </StackPanel>
-            <Button  Width="Auto" Height="25" Command="{Binding AllItemCollectionData, Mode=OneWay, Source={StaticResource myVW}}"
-                     CommandParameter="{Binding}"/>
+            
+            <Line X1="10" X2="100"
+                          Stretch="Fill" 
+                          StrokeThickness="1" 
+                          Stroke="{StaticResource BasicColor}" 
+                          Margin="20,5,20,5"/>
+            <Button Width="180"
+                    Height="25" 
+                    Command="{Binding AllItemCollectionData, Mode=OneWay, Source={StaticResource myVW}}"
+                    CommandParameter="{Binding}">
+                <TextBlock Text="All Collection" Foreground="{StaticResource ForegroundColor2}"/>
+            </Button>
             
             <ListView ItemsSource="{Binding Source={StaticResource myVW}, Path=MenuItemNames}"
                       SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItemMenu}">
@@ -48,20 +65,26 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="{Binding ImageItem}" Height="32" Width="32"/>
+                                    <Image Source="{Binding ImageItem}"
+                                           SnapsToDevicePixels="True"
+                                           Height="32"
+                                           Width="32"/>
                                     <TextBlock Text="{Binding ItemMenu}"
                                                Margin="5"/>
                                 </StackPanel>
+                                
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <Button Command="{Binding DeleteItem, Source={StaticResource myVW},
-                                                Mode=OneWay}" 
-                                                CommandParameter="{Binding}"
-                                                Height="25"
-                                                Width="25"
+                                            Mode=OneWay}" 
+                                            CommandParameter="{Binding}"
+                                            Height="25"
+                                            Width="25"
                                             Margin="5">
-                                        <Image Source="/Resources/Images/delete.png" Height="20"/>
+                                        <Image Source="/Resources/Images/delete.png" 
+                                               Height="16"/>
                                     </Button>
                                 </StackPanel>
+                                
                             </Grid>
                         </StackPanel>
                     </DataTemplate>
@@ -69,22 +92,27 @@
             </ListView>
         </StackPanel>
         <!--#endregion-->
+        
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
             <StackPanel>
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
                     <Image Source="{Binding Source={StaticResource myVW}, Path=ImageCategoryTop}" 
-                           Height="25" 
-                           Width="25"
+                           SnapsToDevicePixels="True"
+                           Height="16" 
+                           Width="16"
                            Margin="0,0,5,0"/>
                     <TextBlock Text="{Binding Source={StaticResource myVW}, Path=ItemNameMenu}"
                                Margin="5,5,5,5"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=UrlSiteView}"/>
-                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=LoginView}"/>
-                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=PasswordView}"/>
+                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=UrlSiteView}"
+                             Style="{StaticResource textBox}" />
+                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=LoginView}"
+                             Style="{StaticResource textBox}"/>
+                    <TextBox Text="{Binding Source={StaticResource myVW}, Path=PasswordView}"
+                             Style="{StaticResource textBox}"/>
                     <ComboBox ItemsSource="{Binding Source={StaticResource myVW}, Path=MenuItemNames}"
                               SelectedItem="{Binding Source={StaticResource myVW}, Path=SelectedItemMenu}">
                         <ComboBox.ItemTemplate>
@@ -95,8 +123,16 @@
                     </ComboBox>
                     <Button Height="30" 
                             Width="100"
-                            Content="Save"
-                            Command="{Binding AddData, Mode=OneWay, Source={StaticResource myVW}}"/>
+                            Command="{Binding AddData, Mode=OneWay, Source={StaticResource myVW}}">
+                        <Image Source="/Resources/Images/save.png" 
+                                               SnapsToDevicePixels="True"
+                                               Height="16"/>
+                    </Button>
+                    <Line X1="10" X2="100"
+                          Stretch="Fill" 
+                          StrokeThickness="1" 
+                          Stroke="{StaticResource AdditionalColor}" 
+                          Margin="20,5,20,5"/>
                 </StackPanel>
 
                 <!--#region // Collection Data-->
@@ -111,48 +147,66 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
-                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition Width="35"/>
                                     </Grid.ColumnDefinitions>
 
                                     <StackPanel Margin="10,0,0,0">
+                                        
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Image Source="/Resources/Images/web.png" Height="20"/>
+                                            <Image Source="/Resources/Images/web.png" Height="16"
+                                                   SnapsToDevicePixels="True"/>
                                             <TextBox Text="{Binding UrlSite}" Margin="10,0,0,0" IsReadOnly="True"/>
                                         </StackPanel>
+                                        
                                         <Line X1="10" X2="100" 
                                               Stretch="Fill" 
                                               StrokeThickness="1" 
                                               Stroke="{StaticResource AdditionalColor}" Margin="20,0,0,0"/>
+                                        
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Image Source="/Resources/Images/login.png" Height="20"/>
+                                            <Image Source="/Resources/Images/login.png" Height="16"
+                                                   SnapsToDevicePixels="True"/>
                                             <TextBox Text="{Binding Login}" Margin="10,0,0,0" IsReadOnly="True"/>
                                         </StackPanel>
+                                        
                                         <Line X1="10" X2="100" 
                                               Stretch="Fill" 
                                               StrokeThickness="1" 
                                               Stroke="{StaticResource AdditionalColor}" Margin="20,0,0,0"/>
+                                        
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Image Source="/Resources/Images/password.png" Height="20"/>
+                                            <Image Source="/Resources/Images/password.png" Height="16"
+                                                   SnapsToDevicePixels="True"/>
                                             <TextBox Text="{Binding Password}" Margin="10,0,0,0" IsReadOnly="True"/>
                                         </StackPanel>
+                                        
                                     </StackPanel>
-                                    <StackPanel Grid.Column="1">
+                                    <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
                                     <Button Height="25"
                                             Width="25"
+                                            Margin="0,5,0,5"
                                             Background="Transparent"
                                             Command="{Binding DeleteData, Source={StaticResource myVW},
                                             Mode=OneWay}" 
                                             CommandParameter="{Binding}">
-                                        <Image Source="/Resources/Images/delete.png" Height="20"/>
+                                        <Image Source="/Resources/Images/delete.png" 
+                                               SnapsToDevicePixels="True"
+                                               Height="16"/>
                                     </Button>
+                                        
                                     <Button Height="25"
                                             Width="25"
+                                             Margin="0,5,0,5"
                                             Background="Transparent"
                                             Command="{Binding EditData, Source={StaticResource myVW},
                                             Mode=OneWay}" 
                                             CommandParameter="{Binding}"
                                             IsEnabled="{Binding Source={StaticResource myVW}, Path=IsEnabledButton}">
-                                        <Image Source="/Resources/Images/edit.png" Height="20"/>
+                                        <Image Source="/Resources/Images/edit.png" 
+                                               SnapsToDevicePixels="True"
+                                               Height="16"/>
                                     </Button>
                                     </StackPanel>
                                 </Grid>

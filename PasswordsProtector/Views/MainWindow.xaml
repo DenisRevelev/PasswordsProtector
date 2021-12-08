@@ -27,7 +27,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Panel.ZIndex="1" Orientation="Horizontal" FlowDirection="RightToLeft" >
-            <Button Content="X" Width="20" Command="{Binding CloseApplicationCommand, Mode=OneWay}"/>
+            <Button Width="20" Command="{Binding CloseApplicationCommand, Mode=OneWay}">
+                <TextBlock Text="X" Foreground="{StaticResource ForegroundColor2}"/>
+            </Button>
         </StackPanel>
         <Grid Grid.RowSpan="2" 
               Background="{StaticResource BasicColor}">
@@ -63,11 +65,13 @@
                     </StackPanel>
                     <!--#region // Password field-->
                     <StackPanel VerticalAlignment="Center">
-                        <TextBox x:Name="passwordCheck"
+                        <TextBox x:Name="passwordCheck" Style="{StaticResource textBox}"
                              Text="{Binding Path=CheckPassword}" 
-                             Height="25" Background="White"/>
+                             Height="25"/>
                         <Button  Command="{Binding PasswordValidationCommand, Mode=OneWay}"
-                             Height="25" Content="Вход" Margin="10"/>
+                             Height="25" Margin="10">
+                            <TextBlock Text="Вход" Foreground="{StaticResource ForegroundColor2}"/>
+                        </Button>
                     </StackPanel>
                     <!--#endregion-->
 
@@ -83,27 +87,35 @@
                             </Grid.RowDefinitions>
                             <StackPanel Background="{StaticResource AdditionalColor}">
                                 <TextBox x:Name="oldPassword" Text="{Binding Path=OldPassword}" 
+                                         Style="{StaticResource textBox}"
                                          Height="25" Background="White" Margin="10"/>
                                 <TextBox x:Name="setNewPassword" Text="{Binding Path=SetMewPassword}" 
+                                         Style="{StaticResource textBox}"
                                          Height="25" Background="White" Margin="10"/>
                                 <TextBox x:Name="CheckNewPassworSet" Text="{Binding Path=CheckNewPasswordSet}"
+                                         Style="{StaticResource textBox}"
                                          Height="25" Background="White" Margin="10"/>
-                                <Button Height="25"  Content="Сохранить новый пароль" Margin="10" 
-                                        Command="{Binding SaveNewPasswordCommand, Mode=OneWay}"/>
+                                <Button Height="25"  Margin="10" 
+                                        Command="{Binding SaveNewPasswordCommand, Mode=OneWay}">
+                                    <TextBlock Text="Сохранить новый пароль" Foreground="{StaticResource ForegroundColor2}"/>
+                                </Button>
+                                
                             </StackPanel>
                             <StackPanel Grid.Row="1">
                                 <Button x:Name="showUIElementForSetNewPassword"
-                                        Content="Сменить пароль"
                                         Width="150" Height="20" 
                                         Visibility="Visible"
-                                        Click="showUIElementForSetNewPassword_Click"/>
+                                        Click="showUIElementForSetNewPassword_Click">
+                                    <TextBlock Text="Сменить пароль" Foreground="{StaticResource ForegroundColor2}"/>
+                                </Button>
                             </StackPanel>
                             <StackPanel Grid.Row="1">
                                 <Button x:Name="showUIElementForEntrance"
-                                        Content="Назад"
                                         Width="150" Height="20"  
                                         Visibility="Collapsed"
-                                        Click="showUIElementForEntrance_Click"/>
+                                        Click="showUIElementForEntrance_Click">
+                                    <TextBlock Text="Назад" Foreground="{StaticResource ForegroundColor2}"/>
+                                </Button>
                             </StackPanel>
                         </Grid>
                     </StackPanel>

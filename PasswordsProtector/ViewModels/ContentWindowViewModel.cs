@@ -377,11 +377,11 @@ namespace PasswordsProtector.ViewModels
             }
             else
             {
-                //CryptographyXml.DecryptXml(_fileName);
+                CryptographyXml.DecryptXml(_fileName);
                 EnteredData = LoadingData.LoadData(_fileName);
                 MenuItemNames = LoadingData.LoadMenu(_fileNameForMenu);
                 ReturnAllItemCollection();
-                //CryptographyXml.EcryptXml(_encryptElement, _fileName);
+                CryptographyXml.EcryptXml(_encryptElement, _fileName);
             }
         }
 
@@ -466,7 +466,7 @@ namespace PasswordsProtector.ViewModels
         {
             SaveData.SaveCollectionData(EnteredData, _fileName);
             SaveData.SaveCollectionData(MenuItemNames, _fileNameForMenu);
-            //CryptographyXml.EcryptXml(_encryptElement, _fileName);
+            CryptographyXml.EcryptXml(_encryptElement, _fileName);
         }
 
         /// <summary>
